@@ -1,103 +1,106 @@
-
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ConfigGenerator } from "@/components/features/config-generator";
-import { SmartRouting } from "@/components/features/smart-routing";
-import { TrafficObfuscation } from "@/components/features/traffic-obfuscation";
-import { StealthMode } from "@/components/features/stealth-mode";
-import { QuantumRelay } from "@/components/features/quantum-relay";
-import { AINeuralEngine } from "@/components/features/ai-neural-engine";
-import { HyperPerformanceModule } from "@/components/features/hyper-performance-module";
-import { QuantumSafeSupreme } from "@/components/features/quantum-safe-supreme";
-import { StealthTechnologyProMax } from "@/components/features/stealth-technology-pro-max";
-import { InfrastructureFeatures } from "@/components/features/infrastructure-features";
-import { BarChart, Cpu, Server, ShieldCheck, Zap } from "lucide-react";
+import { useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ConfigGenerator } from "./features/config-generator";
+import { SmartRouting } from "./features/smart-routing";
+import { QuantumRelay } from "./features/quantum-relay";
+import { StealthMode } from "./features/stealth-mode";
+import { AINeuralEngine } from "./features/ai-neural-engine";
+import { TrafficObfuscation } from "./features/traffic-obfuscation";
+import { HyperPerformanceModule } from "./features/hyper-performance-module";
+import { QuantumSafeSupreme } from "./features/quantum-safe-supreme";
+import { StealthTechnologyProMax } from "./features/stealth-technology-pro-max";
+import { InfrastructureFeatures } from "./features/infrastructure-features";
+import { NetworkHealthDiagnosis } from "./features/network-health-diagnosis"; // Import the new component
 
 export function Dashboard() {
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+
   return (
-    <Tabs defaultValue="dashboard" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 md:grid-cols-3">
-        <TabsTrigger value="dashboard">
-          <Zap className="mr-2 h-4 w-4" />
-          Dashboard
-        </TabsTrigger>
-        <TabsTrigger value="generator">
-          <Server className="mr-2 h-4 w-4" />
-          Generator
-        </TabsTrigger>
-        <TabsTrigger value="ai-tools">
-          <Cpu className="mr-2 h-4 w-4" />
-          AI Tools
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="dashboard" className="mt-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline text-2xl tracking-wider">Dashboard</CardTitle>
-            <CardDescription>Real-time status of your QuantumProxy connection.</CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="hover:border-primary/80 transition-colors">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Connection Status</CardTitle>
-                <Zap className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-accent">Connected</div>
-                <p className="text-xs text-muted-foreground">Low Latency: 12ms</p>
-              </CardContent>
-            </Card>
-             <Card className="hover:border-primary/80 transition-colors">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Protocol</CardTitle>
-                <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">VLESS + Reality</div>
-                <p className="text-xs text-muted-foreground">Quantum-Safe Encryption: Falcon</p>
-              </CardContent>
-            </Card>
-             <Card className="hover:border-primary/80 transition-colors">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Data Transferred</CardTitle>
-                <BarChart className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">124.5 GB</div>
-                <p className="text-xs text-muted-foreground">This session</p>
-              </CardContent>
-            </Card>
-          </CardContent>
-        </Card>
-      </TabsContent>
-      <TabsContent value="generator" className="mt-4">
-        <ConfigGenerator />
-        <div className="mt-6">
-            <HyperPerformanceModule />
-        </div>
-        <div className="mt-6">
-            <InfrastructureFeatures />
-        </div>
-      </TabsContent>
-      <TabsContent value="ai-tools" className="mt-4">
-        <div className="grid gap-6 lg:grid-cols-2">
+    <div className="w-full max-w-4xl mx-auto p-4 md:p-6">
+      <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">
+        QuantumProxy-AI Dashboard
+      </h1>
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full"
+        value={activeItem ?? ""}
+        onValueChange={setActiveItem}
+      >
+        <AccordionItem value="config-generator">
+          <AccordionTrigger>Config Generator</AccordionTrigger>
+          <AccordionContent>
+            <ConfigGenerator />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="smart-routing">
+          <AccordionTrigger>Smart Routing</AccordionTrigger>
+          <AccordionContent>
             <SmartRouting />
-            <TrafficObfuscation />
-            <StealthMode />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="quantum-relay">
+          <AccordionTrigger>Quantum Relay</AccordionTrigger>
+          <AccordionContent>
             <QuantumRelay />
-        </div>
-        <div className="mt-6">
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="stealth-mode">
+          <AccordionTrigger>Stealth Mode</AccordionTrigger>
+          <AccordionContent>
+            <StealthMode />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="ai-neural-engine">
+          <AccordionTrigger>AI Neural Engine</AccordionTrigger>
+          <AccordionContent>
             <AINeuralEngine />
-        </div>
-        <div className="mt-6">
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="traffic-obfuscation">
+          <AccordionTrigger>Traffic Obfuscation</AccordionTrigger>
+          <AccordionContent>
+            <TrafficObfuscation />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="hyper-performance">
+          <AccordionTrigger>Hyper-Performance Module</AccordionTrigger>
+          <AccordionContent>
+            <HyperPerformanceModule />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="quantum-safe">
+          <AccordionTrigger>Quantum-Safe Supreme</AccordionTrigger>
+          <AccordionContent>
             <QuantumSafeSupreme />
-        </div>
-        <div className="mt-6">
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="stealth-pro-max">
+          <AccordionTrigger>Stealth Technology Pro Max</AccordionTrigger>
+          <AccordionContent>
             <StealthTechnologyProMax />
-        </div>
-      </TabsContent>
-    </Tabs>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="infrastructure-features">
+          <AccordionTrigger>Infrastructure Features</AccordionTrigger>
+          <AccordionContent>
+            <InfrastructureFeatures />
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="network-health-diagnosis">
+          <AccordionTrigger>Network Health Diagnosis</AccordionTrigger>
+          <AccordionContent>
+            <NetworkHealthDiagnosis />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
   );
 }

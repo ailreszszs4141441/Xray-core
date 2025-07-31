@@ -1,23 +1,25 @@
+import {
+  trafficObfuscation,
+} from '@/ai/flows/traffic-obfuscation';
 
-'use server';
+import { runFlow } from 'genkit/flow';
+import {
+  TrafficObfuscationInput,
+  TrafficObfuscationOutput,
+  NetworkHealthDiagnosisInput,
+  NetworkHealthDiagnosisOutput,
+} from './types';
+import { networkHealthDiagnosis } from '@/ai/flows/network-health-diagnosis';
 
-import { smartServerSelection, type SmartServerSelectionInput, type SmartServerSelectionOutput } from '@/ai/flows/smart-server-selection';
-import { optimizeRelayChains, type OptimizeRelayChainsInput, type OptimizeRelayChainsOutput } from '@/ai/flows/optimized-relay-chains';
-import { stealthModeProtocolSwitching, type StealthModeProtocolSwitchingInput, type StealthModeProtocolSwitchingOutput } from '@/ai/flows/stealth-mode-protocol-switching';
-import { trafficObfuscation, type TrafficObfuscationInput, type TrafficObfuscationOutput } from '@/ai/flows/traffic-obfuscation';
-
-export async function runSmartServerSelection(input: SmartServerSelectionInput): Promise<SmartServerSelectionOutput> {
-  return await smartServerSelection(input);
-}
-
-export async function runOptimizeRelayChains(input: OptimizeRelayChainsInput): Promise<OptimizeRelayChainsOutput> {
-  return await optimizeRelayChains(input);
-}
-
-export async function runStealthModeProtocolSwitching(input: StealthModeProtocolSwitchingInput): Promise<StealthModeProtocolSwitchingOutput> {
-  return await stealthModeProtocolSwitching(input);
-}
-
+/**
+ * Runs the trafficObfuscation flow.
+ * @param input The input for the traffic obfuscation flow.
+ * @returns The output of the traffic obfuscation flow.
+ */
 export async function runTrafficObfuscation(input: TrafficObfuscationInput): Promise<TrafficObfuscationOutput> {
   return await trafficObfuscation(input);
+}
+
+export async function runNetworkHealthDiagnosis(input: NetworkHealthDiagnosisInput): Promise<NetworkHealthDiagnosisOutput> {
+    return await runFlow(networkHealthDiagnosis, input);
 }
