@@ -5,16 +5,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HyperPerformanceModuleSchema } from "@/ai/flows/hyper-performance-module";
 import type { HyperPerformanceModule } from "@/ai/flows/hyper-performance-module";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { Zap } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAppStore } from "@/lib/store";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
-export function HyperPerformanceModule() {
+export function HyperPerformance() {
   const { updateHyperPerformanceModuleConfig } = useAppStore();
 
   const form = useForm<HyperPerformanceModule>({
@@ -31,18 +30,18 @@ export function HyperPerformanceModule() {
     },
   });
 
-  const onSubmit = (values: HyperPerformanceModule) => {
+  const onSubmit = useCallback((values: HyperPerformanceModule) => {
     updateHyperPerformanceModuleConfig(values);
     toast({
         title: "Hyper-Performance Module Configured",
         description: "Your new high-speed configuration has been integrated.",
     });
-  };
+  }, [updateHyperPerformanceModuleConfig]);
 
   useEffect(() => {
     // Initial update on component mount
     updateHyperPerformanceModuleConfig(form.getValues());
-  }, []);
+  }, [form, updateHyperPerformanceModuleConfig]);
 
 
   return (

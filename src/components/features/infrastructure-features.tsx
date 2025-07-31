@@ -5,14 +5,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InfrastructureFeaturesSchema } from "@/ai/flows/infrastructure-features";
 import type { InfrastructureFeatures } from "@/ai/flows/infrastructure-features";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { Server } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAppStore } from "@/lib/store";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 export function InfrastructureFeatures() {
   const { updateInfrastructureFeaturesConfig } = useAppStore();
@@ -31,18 +30,18 @@ export function InfrastructureFeatures() {
     },
   });
 
-  const onSubmit = (values: InfrastructureFeatures) => {
+  const onSubmit = useCallback((values: InfrastructureFeatures) => {
     updateInfrastructureFeaturesConfig(values);
     toast({
         title: "Infrastructure Features Configured",
         description: "Your new infrastructure configuration has been integrated.",
     });
-  };
+  }, [updateInfrastructureFeaturesConfig]);
 
   useEffect(() => {
     // Initial update on component mount
     updateInfrastructureFeaturesConfig(form.getValues());
-    }, []);
+    }, [form, updateInfrastructureFeaturesConfig]);
 
   return (
     <Card>

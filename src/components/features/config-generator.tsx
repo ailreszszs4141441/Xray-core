@@ -44,7 +44,7 @@ export function ConfigGenerator() {
     <Card>
       <CardHeader>
         <CardTitle className="font-headline tracking-wider text-2xl">Your AI-Generated Config</CardTitle>
-        <CardDescription>This configuration is a unique blend of all the features you've selected, optimized by AI for maximum performance and security.</CardDescription>
+        <CardDescription>This configuration is a unique blend of all the features you&apos;ve selected, optimized by AI for maximum performance and security.</CardDescription>
       </CardHeader>
       <CardContent>
           <div className="mt-4 p-4 border rounded-md bg-black/20">

@@ -1,15 +1,13 @@
 
 import { create } from 'zustand';
-import { AINeuralEngine, generateAINeuralEngineConfig } from '@/ai/flows/ai-neural-engine';
-import { HyperPerformanceModule, generateHyperPerformanceModuleConfig } from '@/ai/flows/hyper-performance-module';
-import { InfrastructureFeatures, generateInfrastructureFeaturesConfig } from '@/ai/flows/infrastructure-features';
-import { QuantumSafeSupreme, generateQuantumSafeSupremeConfig } from '@/ai/flows/quantum-safe-supreme';
-import { StealthTechnologyProMax, generateStealthTechnologyProMaxConfig } from '@/ai/flows/stealth-technology-pro-max';
+import { AINeuralEngine, AINeuralEngineSchema } from '@/ai/flows/ai-neural-engine';
+import { HyperPerformanceModule, HyperPerformanceModuleSchema } from '@/ai/flows/hyper-performance-module';
+import { InfrastructureFeatures, InfrastructureFeaturesSchema } from '@/ai/flows/infrastructure-features';
+import { QuantumSafeSupreme, QuantumSafeSupremeSchema } from '@/ai/flows/quantum-safe-supreme';
+import { StealthTechnologyProMax, StealthTechnologyProMaxSchema } from '@/ai/flows/stealth-technology-pro-max';
 
-// This is a simplified merge logic. In a real-world scenario, this would be
-// a sophisticated function that intelligently combines different config parts.
 const mergeConfigs = (states: Partial<AppState>) => {
-  const xrayConfig = {
+  const xrayConfig: any = {
     log: {
       loglevel: 'warning',
     },
@@ -42,95 +40,87 @@ const mergeConfigs = (states: Partial<AppState>) => {
     other: {},
   };
 
-  // Merge features into the base config
   if (states.aiNeuralEngineConfig) {
-    xrayConfig.other = { ...xrayConfig.other, ...states.aiNeuralEngineConfig };
+    xrayConfig.other['ai-neural-engine'] = states.aiNeuralEngineConfig;
   }
   if (states.hyperPerformanceModuleConfig) {
-    xrayConfig.other = { ...xrayConfig.other, ...states.hyperPerformanceModuleConfig };
+    xrayConfig.other['hyper-performance-module'] = states.hyperPerformanceModuleConfig;
   }
   if (states.infrastructureFeaturesConfig) {
-    xrayConfig.other = { ...xrayConfig.other, ...states.infrastructureFeaturesConfig };
+    xrayConfig.other['infrastructure-features'] = states.infrastructureFeaturesConfig;
   }
   if (states.quantumSafeSupremeConfig) {
-    // Example of deeper integration
-    if (xrayConfig.outbounds[0].protocol === 'vless') {
-        // @ts-ignore
-        xrayConfig.outbounds[0].settings.vnext = [
-        {
-          users: [
-            {
-              encryption: 'none', // Placeholder
-            },
-          ],
-        },
-      ];
-    }
-    xrayConfig.other = { ...xrayConfig.other, ...states.quantumSafeSupremeConfig };
+    xrayConfig.other['quantum-safe-supreme'] = states.quantumSafeSupremeConfig;
   }
   if (states.stealthTechnologyProMaxConfig) {
-    xrayConfig.other = { ...xrayConfig.other, ...states.stealthTechnologyProMaxConfig };
+    xrayConfig.other['stealth-technology-pro-max'] = states.stealthTechnologyProMaxConfig;
   }
 
   return xrayConfig;
 };
 
 interface AppState {
-  aiNeuralEngineConfig: Partial<AINeuralEngine>;
-  hyperPerformanceModuleConfig: Partial<HyperPerformanceModule>;
-  infrastructureFeaturesConfig: Partial<InfrastructureFeatures>;
-  quantumSafeSupremeConfig: Partial<QuantumSafeSupreme>;
-  stealthTechnologyProMaxConfig: Partial<StealthTechnologyProMax>;
+  aiNeuralEngineConfig: AINeuralEngine;
+  hyperPerformanceModuleConfig: HyperPerformanceModule;
+  infrastructureFeaturesConfig: InfrastructureFeatures;
+  quantumSafeSupremeConfig: QuantumSafeSupreme;
+  stealthTechnologyProMaxConfig: StealthTechnologyProMax;
   finalConfig: object;
 
-  updateAINeuralEngineConfig: (values: AINeuralEngine) => void;
-  updateHyperPerformanceModuleConfig: (values: HyperPerformanceModule) => void;
-  updateInfrastructureFeaturesConfig: (values: InfrastructureFeatures) => void;
-  updateQuantumSafeSupremeConfig: (values: QuantumSafeSupreme) => void;
-  updateStealthTechnologyProMaxConfig: (values: StealthTechnologyProMax) => void;
+  updateAINeuralEngineConfig: (values: Partial<AINeuralEngine>) => void;
+  updateHyperPerformanceModuleConfig: (values: Partial<HyperPerformanceModule>) => void;
+  updateInfrastructureFeaturesConfig: (values: Partial<InfrastructureFeatures>) => void;
+  updateQuantumSafeSupremeConfig: (values: Partial<QuantumSafeSupreme>) => void;
+  updateStealthTechnologyProMaxConfig: (values: Partial<StealthTechnologyProMax>) => void;
 }
 
-export const useAppStore = create<AppState>((set, get) => ({
-  aiNeuralEngineConfig: {},
-  hyperPerformanceModuleConfig: {},
-  infrastructureFeaturesConfig: {},
-  quantumSafeSupremeConfig: {},
-  stealthTechnologyProMaxConfig: {},
-  finalConfig: mergeConfigs({}),
+export const useAppStore = create<AppState>((set) => {
+    const initialState = {
+        aiNeuralEngineConfig: AINeuralEngineSchema.parse({}),
+        hyperPerformanceModuleConfig: HyperPerformanceModuleSchema.parse({}),
+        infrastructureFeaturesConfig: InfrastructureFeaturesSchema.parse({}),
+        quantumSafeSupremeConfig: QuantumSafeSupremeSchema.parse({}),
+        stealthTechnologyProMaxConfig: StealthTechnologyProMaxSchema.parse({}),
+    };
 
-  updateAINeuralEngineConfig: (values) => {
-    const config = generateAINeuralEngineConfig(values);
-    set((state) => {
-      const newPartialState = { ...state, aiNeuralEngineConfig: config };
-      return { aiNeuralEngineConfig: config, finalConfig: mergeConfigs(newPartialState) };
-    });
-  },
-  updateHyperPerformanceModuleConfig: (values) => {
-    const config = generateHyperPerformanceModuleConfig(values);
-    set((state) => {
-      const newPartialState = { ...state, hyperPerformanceModuleConfig: config };
-      return { hyperPerformanceModuleConfig: config, finalConfig: mergeConfigs(newPartialState) };
-    });
-  },
-  updateInfrastructureFeaturesConfig: (values) => {
-    const config = generateInfrastructureFeaturesConfig(values);
-    set((state) => {
-        const newPartialState = { ...state, infrastructureFeaturesConfig: config };
-        return { infrastructureFeaturesConfig: config, finalConfig: mergeConfigs(newPartialState) };
-      });
-  },
-  updateQuantumSafeSupremeConfig: (values) => {
-    const config = generateQuantumSafeSupremeConfig(values);
-    set((state) => {
-        const newPartialState = { ...state, quantumSafeSupremeConfig: config };
-        return { quantumSafeSupremeConfig: config, finalConfig: mergeConfigs(newPartialState) };
-      });
-  },
-  updateStealthTechnologyProMaxConfig: (values) => {
-    const config = generateStealthTechnologyProMaxConfig(values);
-    set((state) => {
-        const newPartialState = { ...state, stealthTechnologyProMaxConfig: config };
-        return { stealthTechnologyProMaxConfig: config, finalConfig: mergeConfigs(newPartialState) };
-      });
-  },
-}));
+    return {
+        ...initialState,
+        finalConfig: mergeConfigs(initialState),
+    
+        updateAINeuralEngineConfig: (values) => {
+            set((state) => {
+              const aiNeuralEngineConfig = { ...state.aiNeuralEngineConfig, ...values };
+              const newPartialState = { ...state, aiNeuralEngineConfig };
+              return { ...newPartialState, finalConfig: mergeConfigs(newPartialState) };
+            });
+          },
+        updateHyperPerformanceModuleConfig: (values) => {
+            set((state) => {
+              const hyperPerformanceModuleConfig = { ...state.hyperPerformanceModuleConfig, ...values };
+              const newPartialState = { ...state, hyperPerformanceModuleConfig };
+              return { ...newPartialState, finalConfig: mergeConfigs(newPartialState) };
+            });
+          },
+        updateInfrastructureFeaturesConfig: (values) => {
+            set((state) => {
+                const infrastructureFeaturesConfig = { ...state.infrastructureFeaturesConfig, ...values };
+                const newPartialState = { ...state, infrastructureFeaturesConfig };
+                return { ...newPartialState, finalConfig: mergeConfigs(newPartialState) };
+              });
+          },
+        updateQuantumSafeSupremeConfig: (values) => {
+            set((state) => {
+                const quantumSafeSupremeConfig = { ...state.quantumSafeSupremeConfig, ...values };
+                const newPartialState = { ...state, quantumSafeSupremeConfig };
+                return { ...newPartialState, finalConfig: mergeConfigs(newPartialState) };
+              });
+          },
+        updateStealthTechnologyProMaxConfig: (values) => {
+            set((state) => {
+                const stealthTechnologyProMaxConfig = { ...state.stealthTechnologyProMaxConfig, ...values };
+                const newPartialState = { ...state, stealthTechnologyProMaxConfig };
+                return { ...newPartialState, finalConfig: mergeConfigs(newPartialState) };
+              });
+          },
+    }
+});

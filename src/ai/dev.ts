@@ -1,7 +1,18 @@
-import { config } from 'dotenv';
-config();
+import { genkit } from 'genkit';
+import { googleAI } from 'genkitx/googleai';
+import { networkHealthDiagnosis } from './flows/network-health-diagnosis';
+import { trafficObfuscation } from './flows/traffic-obfuscation';
 
-import '@/ai/flows/smart-server-selection.ts';
-import '@/ai/flows/optimized-relay-chains.ts';
-import '@/ai/flows/stealth-mode-protocol-switching.ts';
-import '@/ai/flows/traffic-obfuscation.ts';
+export default genkit({
+  plugins: [
+    googleAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    }),
+  ],
+  flows: [
+    trafficObfuscation,
+    networkHealthDiagnosis,
+  ],
+  logLevel: 'debug',
+  enableTracing: true,
+});

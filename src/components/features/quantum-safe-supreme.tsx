@@ -5,14 +5,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QuantumSafeSupremeSchema } from "@/ai/flows/quantum-safe-supreme";
 import type { QuantumSafeSupreme } from "@/ai/flows/quantum-safe-supreme";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { ShieldCheck } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAppStore } from "@/lib/store";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 export function QuantumSafeSupreme() {
   const { updateQuantumSafeSupremeConfig } = useAppStore();
@@ -30,18 +29,18 @@ export function QuantumSafeSupreme() {
     },
   });
 
-  const onSubmit = (values: QuantumSafeSupreme) => {
+  const onSubmit = useCallback((values: QuantumSafeSupreme) => {
     updateQuantumSafeSupremeConfig(values);
     toast({
         title: "Quantum-Safe Supreme Configured",
         description: "Your new quantum-resistant configuration has been integrated.",
     });
-  };
+  }, [updateQuantumSafeSupremeConfig]);
 
   useEffect(() => {
     // Initial update on component mount
     updateQuantumSafeSupremeConfig(form.getValues());
-    }, []);
+    }, [form, updateQuantumSafeSupremeConfig]);
 
   return (
     <Card>

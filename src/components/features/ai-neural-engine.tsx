@@ -5,14 +5,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AINeuralEngineSchema } from "@/ai/flows/ai-neural-engine";
 import type { AINeuralEngine } from "@/ai/flows/ai-neural-engine";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { Cpu, Loader2 } from "lucide-react";
+import { Cpu } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAppStore } from "@/lib/store";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 export function AINeuralEngine() {
   const { updateAINeuralEngineConfig } = useAppStore();
@@ -31,18 +30,18 @@ export function AINeuralEngine() {
     },
   });
 
-  const onSubmit = (values: AINeuralEngine) => {
+  const onSubmit = useCallback((values: AINeuralEngine) => {
     updateAINeuralEngineConfig(values);
     toast({
         title: "AI Neural Engine Configured",
         description: "Your new AI-powered configuration has been integrated.",
     });
-  };
+  }, [updateAINeuralEngineConfig]);
 
   useEffect(() => {
     // Initial update on component mount
     updateAINeuralEngineConfig(form.getValues());
-  }, []);
+  }, [form, updateAINeuralEngineConfig]);
 
   return (
     <Card>

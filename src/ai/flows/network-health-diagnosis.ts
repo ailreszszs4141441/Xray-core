@@ -2,31 +2,26 @@ import { defineFlow, runFlow } from 'genkit';
 import * as z from 'zod';
 import { NetworkHealthDiagnosisInput, NetworkHealthDiagnosisOutput } from '../../lib/types';
 
-// Define the input schema for the network health diagnosis flow
 const networkHealthDiagnosisInputSchema = z.object({
   jitter: z.number().describe('Jitter in ms'),
   latency: z.number().describe('Latency in ms'),
   packetLoss: z.number().describe('Packet loss percentage'),
 });
 
-// Define the output schema for the network health diagnosis flow
 const networkHealthDiagnosisOutputSchema = z.object({
   diagnosis: z.string().describe('A detailed diagnosis of the network health'),
   recommendations: z.array(z.string()).describe('A list of recommendations to improve network health'),
 });
 
-// Define the network health diagnosis flow
 export const networkHealthDiagnosis = defineFlow(
   {
     name: 'networkHealthDiagnosis',
     inputSchema: networkHealthDiagnosisInputSchema,
     outputSchema: networkHealthDiagnosisOutputSchema,
   },
-  async (input) => {
+  async (input: z.infer<typeof networkHealthDiagnosisInputSchema>): Promise<z.infer<typeof networkHealthDiagnosisOutputSchema>> => {
     const { jitter, latency, packetLoss } = input;
 
-    // A simple logic for diagnosis and recommendations
-    // In a real-world scenario, you might use a more complex model or logic
     let diagnosis = 'Network health is optimal.';
     const recommendations: string[] = [];
 
@@ -56,7 +51,3 @@ export const networkHealthDiagnosis = defineFlow(
     };
   }
 );
-
-export async function runNetworkHealthDiagnosis(input: NetworkHealthDiagnosisInput): Promise<NetworkHealthDiagnosisOutput> {
-  return await runFlow(networkHealthDiagnosis, input);
-}

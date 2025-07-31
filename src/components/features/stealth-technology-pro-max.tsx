@@ -5,14 +5,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StealthTechnologyProMaxSchema } from "@/ai/flows/stealth-technology-pro-max";
 import type { StealthTechnologyProMax } from "@/ai/flows/stealth-technology-pro-max";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { EyeOff } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAppStore } from "@/lib/store";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 export function StealthTechnologyProMax() {
   const { updateStealthTechnologyProMaxConfig } = useAppStore();
@@ -31,18 +30,18 @@ export function StealthTechnologyProMax() {
     },
   });
 
-  const onSubmit = (values: StealthTechnologyProMax) => {
+  const onSubmit = useCallback((values: StealthTechnologyProMax) => {
     updateStealthTechnologyProMaxConfig(values);
     toast({
         title: "Stealth Technology Pro Max Configured",
         description: "Your new ultra-stealth configuration has been integrated.",
     });
-  };
+  }, [updateStealthTechnologyProMaxConfig]);
 
   useEffect(() => {
     // Initial update on component mount
     updateStealthTechnologyProMaxConfig(form.getValues());
-    }, []);
+    }, [form, updateStealthTechnologyProMaxConfig]);
 
   return (
     <Card>
